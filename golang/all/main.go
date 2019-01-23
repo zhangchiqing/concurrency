@@ -70,6 +70,7 @@ func run(log logger) {
 	}()
 
 	aV := <-aP
+	// Be careful here. Forgetting to handle the error still compiles.
 	if aV.error != nil {
 		return
 	}
