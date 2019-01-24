@@ -44,31 +44,31 @@ type promiseInt struct {
 
 func run(log logger) {
 	// using anonymouse structs and fields
-	aP := make(chan struct {
+	aP := make(chan *struct {
 		string
 		error
 	})
 
 	// using struct
-	bP := make(chan promiseInt)
+	bP := make(chan *promiseInt)
 
 	// using anonymouse struct and closure
 	go func() {
 		log("getA start")
 		a, err := getA()
 		log("getA end:", a, err)
-		aP <- struct {
+		aP <- &struct {
 			string
 			error
 		}{a, err}
 	}()
 
 	// using struct and passing in values
-	go func(log logger, bP chan<- promiseInt) {
+	go func(log logger, bP chan<- *promiseInt) {
 		log("getB start")
 		b, err := getB()
 		log("getB end:", b, err)
-		bP <- promiseInt{b, err}
+		bP <- &promiseInt{b, err}
 	}(log, bP)
 
 	aV := <-aP

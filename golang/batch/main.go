@@ -50,19 +50,20 @@ type promiseInt struct {
 	error
 }
 
-type promiseIntChan = chan promiseInt
+type promiseIntChan = chan *promiseInt
 
 func run(log logger) ([]int, error) {
 	cs := []string{"A", "B", "C", "D", "E"}
 
-	nPs := []promiseIntChan{}
+	nPs := [](chan *promiseInt){}
 	for _, c := range cs {
-		nP := make(chan promiseInt)
-		go func(c string, nP chan<- promiseInt) {
+		nP := make(chan *promiseInt)
+		go func(c string, nP chan<- *promiseInt) {
 			log("getNWithC start:", c)
 			n, err := getNWithC(c)
 			log("getNWithC end:", c, n, err)
-			nP <- promiseInt{n, err}
+			nP <- &promiseInt{n, err}
+			close(nP)
 		}(c, nP)
 		nPs = append(nPs, nP)
 	}
