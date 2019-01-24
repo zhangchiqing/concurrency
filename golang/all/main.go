@@ -52,9 +52,10 @@ func run(log logger) {
 	// using struct
 	bP := make(chan promiseInt)
 
+	// using anonymouse struct and closure
 	go func() {
 		log("getA start")
-		a, err := getA(log)
+		a, err := getA()
 		log("getA end:", a, err)
 		aP <- struct {
 			string
@@ -62,12 +63,13 @@ func run(log logger) {
 		}{a, err}
 	}()
 
-	go func() {
+	// using struct and passing in values
+	go func(log logger, bP chan<- promiseInt) {
 		log("getB start")
-		b, err := getB(log)
+		b, err := getB()
 		log("getB end:", b, err)
 		bP <- promiseInt{b, err}
-	}()
+	}(log, bP)
 
 	aV := <-aP
 	// Be careful here. Forgetting to handle the error still compiles.
@@ -81,7 +83,7 @@ func run(log logger) {
 	}
 
 	log("getCWithAB start", aV.string, bV.int)
-	c, err := getCWithAB(log, aV.string, bV.int)
+	c, err := getCWithAB(aV.string, bV.int)
 	log("getCWithAB end", c, err)
 
 	if err != nil {
@@ -89,17 +91,17 @@ func run(log logger) {
 	}
 }
 
-func getA(log logger) (string, error) {
+func getA() (string, error) {
 	wait(3)
 	return "A", nil
 }
 
-func getB(log logger) (int, error) {
+func getB() (int, error) {
 	wait(1)
 	return 3, nil
 }
 
-func getCWithAB(log logger, a string, b int) (string, error) {
+func getCWithAB(a string, b int) (string, error) {
 	wait(2)
 	// return "C", nil
 	return "", errors.New("failed")
