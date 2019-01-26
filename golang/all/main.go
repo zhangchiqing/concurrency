@@ -65,6 +65,9 @@ func run(log logger) (string, error) {
 		bP <- &promiseInt{b, err}
 	}(log, bP)
 
+	// It's undeterministic whether aP or bP will receive a value first,
+	// we assume aP will receive first here, but if bP actually received a value, which is an
+	// error, earlier than aP, then it has to wait until aP receives its value to return the error from bP
 	aV := <-aP
 	if aV == nil {
 		return "", errors.New("aV is nil")
