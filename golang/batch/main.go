@@ -65,8 +65,6 @@ func run(log logger) ([]int, error) {
 			n, err := getNWithC(c)
 			log("getNWithC end:", c, n, err)
 			nP <- &promiseInt{n, err}
-			// memory leak if not closing?
-			close(nP)
 		}(c, nP)
 		nPs = append(nPs, nP)
 	}

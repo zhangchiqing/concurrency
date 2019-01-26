@@ -59,7 +59,6 @@ func run(log logger) (int, error) {
 		aP <- aV
 		log("getA end aV (this might or might not print, if print, it might appear before or after 'getA end:***':", *aV)
 		log("if timeout, this won't be printed. if not timeout, this might be printed after 'run end ***'")
-		close(aP)
 	}(aP)
 
 	var aV *promiseInt
