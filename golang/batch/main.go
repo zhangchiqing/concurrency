@@ -46,8 +46,8 @@ func now() string {
 }
 
 type promiseInt struct {
-	int
-	error
+	Value int
+	Err   error
 }
 
 type promiseIntChan = chan *promiseInt
@@ -78,10 +78,10 @@ func run(log logger) ([]int, error) {
 			return nil, fmt.Errorf("mV is nil, i:%v", i)
 		}
 
-		if mV.error != nil {
-			return nil, mV.error
+		if mV.Err != nil {
+			return nil, mV.Err
 		}
-		ms = append(ms, mV.int)
+		ms = append(ms, mV.Value)
 	}
 
 	return ms, nil

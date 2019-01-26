@@ -37,33 +37,27 @@ func start() logger {
 	}
 }
 
+type promiseString struct {
+	Value string
+	Err   error
+}
+
 type promiseInt struct {
-	int
-	error
+	Value int
+	Err   error
 }
 
 func run(log logger) (string, error) {
-	// using anonymouse structs and fields
-	aP := make(chan *struct {
-		string
-		error
-	})
-
-	// using struct
+	aP := make(chan *promiseString)
 	bP := make(chan *promiseInt)
 
-	// using anonymouse struct and closure
-	go func() {
+	go func(log logger, aP chan<- *promiseString) {
 		log("getA start")
 		a, err := getA()
 		log("getA end:", a, err)
-		aP <- &struct {
-			string
-			error
-		}{a, err}
-	}()
+		aP <- &promiseString{a, err}
+	}(log, aP)
 
-	// using struct and passing in values
 	go func(log logger, bP chan<- *promiseInt) {
 		log("getB start")
 		b, err := getB()
@@ -77,17 +71,17 @@ func run(log logger) (string, error) {
 	}
 
 	// Be careful here. Forgetting to handle the error still compiles.
-	if aV.error != nil {
-		return "", aV.error
+	if aV.Err != nil {
+		return "", aV.Err
 	}
 
 	bV := <-bP
-	if bV.error != nil {
-		return "", bV.error
+	if bV.Err != nil {
+		return "", bV.Err
 	}
 
-	log("getCWithAB start", aV.string, bV.int)
-	c, err := getCWithAB(aV.string, bV.int)
+	log("getCWithAB start aV:", aV.Value, aV.Err, "bV:", bV.Value, bV.Err)
+	c, err := getCWithAB(aV.Value, bV.Value)
 	log("getCWithAB end", c, err)
 	return c, err
 }

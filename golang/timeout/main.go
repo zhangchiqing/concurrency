@@ -46,8 +46,8 @@ func now() string {
 }
 
 type promiseInt struct {
-	value int
-	err   error
+	Value int
+	Err   error
 }
 
 func run(log logger) (int, error) {
@@ -74,12 +74,12 @@ func run(log logger) (int, error) {
 		log("getA end:", nil)
 		return 0, nil
 	}
-	log("getA end:", aV.value, aV.err)
+	log("getA end:", aV.Value, aV.Err)
 
-	if aV.err != nil {
-		return 0, aV.err
+	if aV.Err != nil {
+		return 0, aV.Err
 	}
-	return aV.value, nil
+	return aV.Value, nil
 }
 
 func getA() (int, error) {
