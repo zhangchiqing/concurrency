@@ -20,8 +20,8 @@ import (
 func main() {
 	log := start()
 	log("run start")
-	run(log)
-	log("run end")
+	v, err := run(log)
+	log("run end:", v, err)
 }
 
 type logger = func(msgs ...interface{})
@@ -42,7 +42,7 @@ type promiseInt struct {
 	error
 }
 
-func run(log logger) {
+func run(log logger) (string, error) {
 	// using anonymouse structs and fields
 	aP := make(chan *struct {
 		string
@@ -72,23 +72,24 @@ func run(log logger) {
 	}(log, bP)
 
 	aV := <-aP
+	if aV == nil {
+		return "", errors.New("aV is nil")
+	}
+
 	// Be careful here. Forgetting to handle the error still compiles.
 	if aV.error != nil {
-		return
+		return "", aV.error
 	}
 
 	bV := <-bP
 	if bV.error != nil {
-		return
+		return "", bV.error
 	}
 
 	log("getCWithAB start", aV.string, bV.int)
 	c, err := getCWithAB(aV.string, bV.int)
 	log("getCWithAB end", c, err)
-
-	if err != nil {
-		return
-	}
+	return c, err
 }
 
 func getA() (string, error) {

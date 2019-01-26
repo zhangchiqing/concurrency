@@ -35,21 +35,25 @@ func now() string {
 
 func getA() (string, error) {
 	log("getA start")
-	time.Sleep(time.Duration(3) * time.Second)
+	wait(3)
 	log("getA end")
 	return "A", nil
 }
 
 func getBWithA(a string) (int, error) {
 	log("getBWithA start")
-	time.Sleep(time.Duration(3) * time.Second)
+	wait(3)
 	log("getBWithA end")
 	return 3, nil
 }
 
 func getCWithAB(a string, b int) (string, error) {
 	log("getCWithAB start")
-	time.Sleep(time.Duration(3) * time.Second)
+	wait(3)
 	log("getCWithAB end")
 	return "C", nil
+}
+
+func wait(sec int) {
+	time.Sleep(time.Duration(sec) * time.Second)
 }

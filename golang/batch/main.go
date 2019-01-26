@@ -58,19 +58,26 @@ func run(log logger) ([]int, error) {
 	nPs := [](chan *promiseInt){}
 	for _, c := range cs {
 		nP := make(chan *promiseInt)
+		// Be careful: `c` has to pass into the closure, otherwise it would aways be
+		// the last c in cs
 		go func(c string, nP chan<- *promiseInt) {
 			log("getNWithC start:", c)
 			n, err := getNWithC(c)
 			log("getNWithC end:", c, n, err)
 			nP <- &promiseInt{n, err}
+			// memory leak if not closing?
 			close(nP)
 		}(c, nP)
 		nPs = append(nPs, nP)
 	}
 
 	ms := []int{}
-	for _, nP := range nPs {
+	for i, nP := range nPs {
 		mV := <-nP
+		if mV == nil {
+			return nil, fmt.Errorf("mV is nil, i:%v", i)
+		}
+
 		if mV.error != nil {
 			return nil, mV.error
 		}
@@ -82,7 +89,13 @@ func run(log logger) ([]int, error) {
 
 func getNWithC(c string) (int, error) {
 	// 1 <= sec <= 5
-	sec := rand.Intn(5) + 1
+	sec := randN(5) + 1
 	time.Sleep(time.Duration(sec) * time.Second)
 	return sec, nil
+}
+
+func randN(n int) int {
+	s := rand.NewSource(time.Now().UnixNano())
+	gen := rand.New(s)
+	return gen.Intn(n)
 }
