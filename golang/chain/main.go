@@ -2,40 +2,65 @@ package main
 
 import (
 	"fmt"
+	"math"
+	"strings"
 	"time"
 )
 
 // ▸ go run main.go
-// [2019-01-27T16:00:15Z] start
-// [2019-01-27T16:00:15Z] getA start
-// [2019-01-27T16:00:18Z] getA end
-// [2019-01-27T16:00:18Z] getBWithA start
-// [2019-01-27T16:00:21Z] getBWithA end
-// [2019-01-27T16:00:21Z] getCWithAB start
-// [2019-01-27T16:00:24Z] getCWithAB end
-// [2019-01-27T16:00:24Z] end: C
+// [2019-01-27T16:12:44Z] [run start]
+// [2019-01-27T16:12:44Z] [getA start]
+// [2019-01-27T16:12:47Z] ...[getA end. a, err: A <nil>]
+// [2019-01-27T16:12:47Z] ...[getBWithA start. a: A]
+// [2019-01-27T16:12:50Z] ......[getBWithA end. b, err: 3 <nil>]
+// [2019-01-27T16:12:50Z] ......[getCWithAB start. a, b: A 3]
+// [2019-01-27T16:12:53Z] .........[getCWithAB end. c, err: C <nil>]
+// [2019-01-27T16:12:53Z] .........[run end C <nil>]
 func main() {
-	log("start")
-	a, err := getA()
-	if err != nil {
-		log(err)
-	}
-
-	b, err := getBWithA(a)
-	if err != nil {
-		log(err)
-	}
-
-	c, err := getCWithAB(a, b)
-	if err != nil {
-		log(err)
-	}
-
-	log("end: " + c)
+	log := start()
+	log("run start")
+	ns, err := run(log)
+	log("run end", ns, err)
 }
 
-func log(msg interface{}) {
-	fmt.Println(fmt.Sprintf("[%v] %v", now(), msg))
+func run(log logger) (string, error) {
+	log("getA start")
+	a, err := getA()
+	log("getA end. a, err:", a, err)
+
+	if err != nil {
+		return "", err
+	}
+
+	log("getBWithA start. a:", a)
+	b, err := getBWithA(a)
+	log("getBWithA end. b, err:", b, err)
+
+	if err != nil {
+		return "", err
+	}
+
+	log("getCWithAB start. a, b:", a, b)
+	c, err := getCWithAB(a, b)
+	log("getCWithAB end. c, err:", c, err)
+	if err != nil {
+		return "", err
+	}
+
+	return c, nil
+}
+
+type logger = func(msgs ...interface{})
+
+func start() logger {
+	begin := time.Now()
+	return func(msgs ...interface{}) {
+		cur := time.Now()
+		secsFloat64 := cur.Sub(begin).Seconds()
+		secs := int(math.Round(secsFloat64))
+		dots := strings.Repeat(".", secs)
+		fmt.Println(fmt.Sprintf("[%v] %v%v", now(), dots, msgs))
+	}
 }
 
 func now() string {
@@ -43,23 +68,17 @@ func now() string {
 }
 
 func getA() (string, error) {
-	log("getA start")
 	wait(3)
-	log("getA end")
 	return "A", nil
 }
 
 func getBWithA(a string) (int, error) {
-	log("getBWithA start")
 	wait(3)
-	log("getBWithA end")
 	return 3, nil
 }
 
 func getCWithAB(a string, b int) (string, error) {
-	log("getCWithAB start")
 	wait(3)
-	log("getCWithAB end")
 	return "C", nil
 }
 
