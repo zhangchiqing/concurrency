@@ -18,9 +18,9 @@ There is no concurrency in this example. One async call chained after another
 ```
 
 ### Multiple async calls run concurrently
-Async calls running concurrently could have values with different return types, in order to provide input values for another async call.
+Async calls running concurrently could have different types of input and output.
 
-In this example, `getA` and `getB` have different types, they run concurrently and `getCWithA` is not called until both `getA` and `getB` are finished.
+In this example, `getA` and `getB` have different types, they run concurrently and `getCWithAB` is not called until both `getA` and `getB` are finished. And the return values of `getA` and `getB` will be passed to `getCWIthAB`.
 
 ```
 ▸ cd golang/batch
@@ -35,8 +35,8 @@ In this example, `getA` and `getB` have different types, they run concurrently a
 [2019-01-27T15:59:24Z] .....[run end:  failed]
 ```
 
-### Making async calls in batch
-This example shows how to making a batch of async calls concurrently with inputs from a list of values, and how to wait and return the list of return values when all the async calls finish.
+### Making async calls in a batch
+This example shows how to make a batch of async calls concurrently with inputs from a list of values, and how to wait and return the list of return values when all the async calls finish.
 
 ```
 ▸ cd golang/all
@@ -58,7 +58,7 @@ This example shows how to making a batch of async calls concurrently with inputs
 A fixed-length queue could be added to throttle the number of async calls running concurrently.
 
 ### Timeout
-This example shows how to give a timeout for an async call. The implementation is also essentially the same for racing two async calls.
+This example shows how to give a timeout for an async call. The implementation can also be used the same for racing two async calls.
 
 ```
 ▸ cd golang/timeout
