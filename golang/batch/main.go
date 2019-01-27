@@ -9,18 +9,18 @@ import (
 )
 
 // ▸ go run main.go
-// [2019-01-24T16:18:02Z] [run start]
-// [2019-01-24T16:18:02Z] [getNWithC start: E]
-// [2019-01-24T16:18:02Z] [getNWithC start: B]
-// [2019-01-24T16:18:02Z] [getNWithC start: D]
-// [2019-01-24T16:18:02Z] [getNWithC start: A]
-// [2019-01-24T16:18:02Z] [getNWithC start: C]
-// [2019-01-24T16:18:04Z] ..[getNWithC end: C 2 <nil>]
-// [2019-01-24T16:18:04Z] ..[getNWithC end: E 2 <nil>]
-// [2019-01-24T16:18:05Z] ...[getNWithC end: B 3 <nil>]
-// [2019-01-24T16:18:05Z] ...[getNWithC end: D 3 <nil>]
-// [2019-01-24T16:18:07Z] .....[getNWithC end: A 5 <nil>]
-// [2019-01-24T16:18:07Z] .....[run end [5 3 2 3 2] <nil>]
+// [2019-01-27T15:59:44Z] [run start]
+// [2019-01-27T15:59:44Z] [getNWithC start: E]
+// [2019-01-27T15:59:44Z] [getNWithC start: B]
+// [2019-01-27T15:59:44Z] [getNWithC start: C]
+// [2019-01-27T15:59:44Z] [getNWithC start: A]
+// [2019-01-27T15:59:44Z] [getNWithC start: D]
+// [2019-01-27T15:59:46Z] ..[getNWithC end: C 2 <nil>]
+// [2019-01-27T15:59:46Z] ..[getNWithC end: D 2 <nil>]
+// [2019-01-27T15:59:46Z] ..[getNWithC end: B 2 <nil>]
+// [2019-01-27T15:59:47Z] ...[getNWithC end: A 3 <nil>]
+// [2019-01-27T15:59:49Z] .....[getNWithC end: E 5 <nil>]
+// [2019-01-27T15:59:49Z] .....[run end [3 2 2 2 5] <nil>]
 func main() {
 	log := start()
 	log("run start")

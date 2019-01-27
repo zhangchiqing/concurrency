@@ -9,18 +9,10 @@ import (
 )
 
 // ▸ go run main.go
-// [2019-01-26T13:32:20Z] [run start]
-// [2019-01-26T13:32:20Z] [getA start]
-// [2019-01-26T13:32:22Z] ..[getA end: 3 <nil>]
-// [2019-01-26T13:32:22Z] ..[run end 3 <nil>]
-
-// ▸ go run main.go
-// [2019-01-26T13:33:16Z] [run start]
-// [2019-01-26T13:33:16Z] [getA start]
-// [2019-01-26T13:33:18Z] ..[getA end aV (this might or might not print, if print, it might appear before or after 'getA end:***': {3 <nil>}]
-// [2019-01-26T13:33:18Z] ..[if timeout, this won't be printed. if not timeout, this might be printed after 'run end ***']
-// [2019-01-26T13:33:18Z] ..[getA end: 3 <nil>]
-// [2019-01-26T13:33:18Z] ..[run end 3 <nil>]
+// [2019-01-27T16:01:44Z] [run start]
+// [2019-01-27T16:01:44Z] [getA start]
+// [2019-01-27T16:01:47Z] ...[getA end: 0 getA Timeout after 3 secs]
+// [2019-01-27T16:01:47Z] ...[run end 0 getA Timeout after 3 secs]
 func main() {
 	log := start()
 	log("run start")
@@ -65,7 +57,7 @@ func run(log logger) (int, error) {
 	select {
 	case aV = <-aP:
 	case <-time.After(3 * time.Second):
-		aV = &promiseInt{0, errors.New("getA Timeout after 5 secs")}
+		aV = &promiseInt{0, errors.New("getA Timeout after 3 secs")}
 	}
 
 	// make sure to handle the nil pointer case
@@ -82,11 +74,10 @@ func run(log logger) (int, error) {
 }
 
 func getA() (int, error) {
-	// use wait(4) to trigger timeout
-	// wait(4)
-	wait(2)
-	return 3, nil
-	// return 3, errors.New("getA failed")
+	wait(4)
+	return 3, errors.New("getA failed")
+	// wait(2)
+	// return 0, nil
 }
 
 func wait(sec int) {

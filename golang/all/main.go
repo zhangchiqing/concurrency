@@ -9,14 +9,14 @@ import (
 )
 
 // ▸ go run main.go
-// [2019-01-23T18:22:51Z] [run start]
-// [2019-01-23T18:22:51Z] [getB start]
-// [2019-01-23T18:22:51Z] [getA start]
-// [2019-01-23T18:22:52Z] .[getB end: 3 <nil>]
-// [2019-01-23T18:22:54Z] ...[getA end: A <nil>]
-// [2019-01-23T18:22:54Z] ...[getCWithAB start A 3]
-// [2019-01-23T18:22:56Z] .....[getCWithAB end  failed]
-// [2019-01-23T18:22:56Z] .....[run end]
+// [2019-01-27T15:59:19Z] [run start]
+// [2019-01-27T15:59:19Z] [getB start]
+// [2019-01-27T15:59:19Z] [getA start]
+// [2019-01-27T15:59:20Z] .[getB end: 3 <nil>]
+// [2019-01-27T15:59:22Z] ...[getA end: A <nil>]
+// [2019-01-27T15:59:22Z] ...[getCWithAB start aV: A <nil> bV: 3 <nil>]
+// [2019-01-27T15:59:24Z] .....[getCWithAB end  failed]
+// [2019-01-27T15:59:24Z] .....[run end:  failed]
 func main() {
 	log := start()
 	log("run start")
