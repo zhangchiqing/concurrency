@@ -68,3 +68,34 @@ This example shows how to give a timeout for an async call. The implementation c
 [2019-01-27T16:01:47Z] ...[getA end: 0 getA Timeout after 3 secs]
 [2019-01-27T16:01:47Z] ...[run end 0 getA Timeout after 3 secs]
 ```
+
+### Pulling asynchronously and then extract synchronously
+This example shows how to making first calls (pull) asynchronously and then run the second call (extract) synchronously.
+
+The behavior is similar to how docker pull and extract images, where it pulls different layers asynchronously and then extracted one after the other in order.
+
+```
+▸ go run main.go
+[2019-03-01T22:53:39Z] [run start]
+[2019-03-01T22:53:39Z] [pulling...: E]
+[2019-03-01T22:53:39Z] [pulling...: B]
+[2019-03-01T22:53:39Z] [pulling...: D]
+[2019-03-01T22:53:39Z] [pulling...: C]
+[2019-03-01T22:53:39Z] [pulling...: A]
+[2019-03-01T22:53:40Z] .[pulled: A 1 <nil>]
+[2019-03-01T22:53:40Z] .[extracting...: A 1]
+[2019-03-01T22:53:41Z] ..[pulled: E 2 <nil>]
+[2019-03-01T22:53:41Z] ..[extracted: A 1]
+[2019-03-01T22:53:42Z] ...[pulled: B 3 <nil>]
+[2019-03-01T22:53:42Z] ...[extracting...: B 3]
+[2019-03-01T22:53:43Z] ....[extracted: B 3]
+[2019-03-01T22:53:44Z] .....[pulled: D 5 <nil>]
+[2019-03-01T22:53:44Z] .....[pulled: C 5 <nil>]
+[2019-03-01T22:53:44Z] .....[extracting...: C 5]
+[2019-03-01T22:53:46Z] .......[extracted: C 5]
+[2019-03-01T22:53:46Z] .......[extracting...: D 5]
+[2019-03-01T22:53:48Z] .........[extracted: D 5]
+[2019-03-01T22:53:48Z] .........[extracting...: E 2]
+[2019-03-01T22:53:51Z] ............[extracted: E 2]
+[2019-03-01T22:53:51Z] ............[run end [1 3 5 5 2] <nil>]
+```
